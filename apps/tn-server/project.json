@@ -1,0 +1,65 @@
+{
+  "root": "apps/tn-server",
+  "sourceRoot": "apps/tn-server/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "webpackConfig": "apps/tn-server/webpack.config.js",
+        "outputPath": "dist/apps/trivia-nation/tn-server",
+        "main": "apps/tn-server/src/main.ts",
+        "tsConfig": "apps/tn-server/tsconfig.app.json",
+        "assets": ["apps/tn-server/src/assets", "apps/tn-server/src/bootstrap.sh"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/tn-server/src/environments/environment.ts",
+              "with": "apps/tn-server/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:execute",
+      "options": {
+        "buildTarget": "tn-server:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/tn-server/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/tn-server"],
+      "options": {
+        "jestConfig": "apps/tn-server/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "deploy": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "rm -rf dist/apps/trivia-nation",
+          "nx build tn-server --prod",
+          "nx build tn-client --prod",
+          "rsync -av --exclude=node_modules/ dist/apps/trivia-nation/tn-server/ funkreate:node/trivia-nation/server"
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}

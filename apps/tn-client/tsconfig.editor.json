@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["**/*.ts", "../shared/trivia-contest.ts", "../shared/mocks/mock-trivia-contests.ts"],
+  "compilerOptions": {
+    "types": ["jest", "node"]
+  }
+}

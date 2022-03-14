@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "tn-client": "apps/tn-client",
+    "tn-server": "apps/tn-server"
+  }
+}

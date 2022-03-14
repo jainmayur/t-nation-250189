@@ -1,0 +1,10 @@
+{
+
+    "user":[
+        {"email":"john@gmail.com","password":"qwerty","id":1},
+        {"email":"davis@gmail.com","password":"qwerty","id":2},
+        {"email":"chris@gmail.com","password":"qwerty","id":3}
+    ]
+
+
+}

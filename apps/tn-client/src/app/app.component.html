@@ -1,0 +1,20 @@
+<div id="wrapper" class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" data-bs-toggle="collapse" data-bs-target="#navbarContent" [routerLink]="['']">{{title}}</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="true" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="navbar-collapse collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li *ngFor="let link of links" class="nav-item">
+            <a class="nav-link" aria-current="page" data-bs-toggle="collapse" data-bs-target="#navbarContent" [routerLink]="link.url">{{link.name}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <router-outlet></router-outlet>
+</div>

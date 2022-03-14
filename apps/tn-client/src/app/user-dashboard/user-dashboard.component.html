@@ -1,0 +1,19 @@
+
+<br>
+<h2>Trivia Contests for {{user?.nickName}}</h2>
+ <ul class="list-group" >
+  <li class="list-group-item" *ngFor="let contest of contests">
+   <!-- todo <a routerLink="/contest/{{contest.id}}">-->
+      <span >{{contest.name}}</span> 
+    <!--</a>-->
+  </li>
+</ul> 
+<br>
+<div class="form-group row col-xs-2">
+  <div class="input-group mb-3 pull-right form-inline ">
+    <input type="text" required type="text" class="form-control" name="code" [(ngModel)]="code" id="code" placeholder="Trivia Contest Code"> 
+    <button (click)="joinTriviaContest()" type="submit" class="btn btn-primary">Join New Trivia Contest</button>
+  </div>
+  <div class="alert alert-danger" *ngIf="codeIsInvalid">Invalid Code.</div>
+</div>
+

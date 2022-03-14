@@ -1,0 +1,5 @@
+<p #testP id="testP" innerText="{{pText}}">game-map works!</p>
+
+<canvas #mapCanvas id="map" width="800px" height="800px" 
+    (click)="getSquareClicked($event)"
+    (mousemove)="highlightOnHover($event)"></canvas>
