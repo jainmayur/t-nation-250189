@@ -28,14 +28,15 @@ export class UserDao {
     })
   }
 
-  public async registerUser(firstName: string, lastName: string, email: string): Promise<User> {
+  public async registerUser(firstName: string, lastName: string, email: string): Promise<any> {
     // const $firstName = firstName;
     // const $lastName = lastName;
     // const $email = email;
     
-    this.sqlite.run(`INSERT INTO user (firstName, lastName, email) VALUES (?)`, ['Jake','Wright', 'jw@example.com']){
-      console.log("row inserted");
-    }
+    this.sqlite.run(`INSERT INTO user (firstName, lastName, email) VALUES (?)`, ['Jake','Wright', 'jw@example.com']).then((result => {
+      console.log('row inserted  ', result);
+      
+    }))
     // return this.sqlite.get(`select * from user where email=$username`, { $username }).then(async(result:User)=>{
     //   const hash = result.password
     //   if(await argon2.verify(hash, password)===true){

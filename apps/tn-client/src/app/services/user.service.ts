@@ -1,7 +1,7 @@
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../../../../shared/user';
 
@@ -35,6 +35,22 @@ export class UserService {
         }
       })
     );
+  }
+
+  registerUser(firstName: string, lastName: string, nickName: string, email: string, password: string): any{
+    const url = `${environment.api_url}/users/register`;
+    const body = {
+      firstName: firstName,
+      lastName: lastName,
+      nickName: nickName,
+      email: email,
+      password: password
+
+    }
+    this.http.post(url, body).subscribe(result => {
+        console.log('registerUser  ', result);
+        
+    });
   }
 
 }
