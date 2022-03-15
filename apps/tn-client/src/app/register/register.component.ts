@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
   registerSubmit(){
     console.log("Registration");
     console.log(this.registerForm.firstName);
-    let firstName = this.registerForm.name.firstName.value;
+    let firstName = this.registerForm.controls.firstName.value;
     // let lastName = this.registerForm.id.lastName.value;
     // let nickName = this.registerForm.id.nickName.value;
     // let email = this.registerForm.id.email.value;
