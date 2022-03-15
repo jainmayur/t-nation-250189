@@ -35,7 +35,7 @@ export class UserController {
       const { error } = schema.validate({username,password}, { abortEarly: false });
       if (error) {
         const errors = error.details.map((e) => e.message);
-        this.log.error({ errors}, `GET /api/user/login`);
+        this.log.error({ errors}, `GET /api/users/login`);
         res.status(400).json({errors});
         return;
       }
@@ -82,25 +82,31 @@ export class UserController {
     return async (req, res) => {
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
+      const nickName = req.body.nickName;
       const email = req.body.email;
+      const password = req.body.password;
+      const isTeacher = req.body.isTeacher;
 
       // validate incoming request
       const schema = joi.object({
-        firstname: joi.string().required(),
-        lastname: joi.string().required(),
-        email: joi.string().required()
+        firstName: joi.string().required(),
+        lastName: joi.string().required(),
+        nickName: joi.string().required(),
+        email: joi.string().required(),
+        password: joi.string().required(),
+        isTeacher: joi.number().required()
       })
-      const { error } = schema.validate({firstName,lastName, email}, { abortEarly: false });
+      const { error } = schema.validate({firstName, lastName, nickName, email, password, isTeacher}, { abortEarly: false });
       if (error) {
         const errors = error.details.map((e) => e.message);
-        this.log.error({ errors}, `GET /api/user/register`);
+        this.log.error({ errors}, `GET /api/users/register`);
         res.status(400).json({errors});
         return;
       }
 
-      this.log.info({firstName,lastName, email}, 'getUser called');
+      this.log.info({firstName, lastName, nickName, email, password, isTeacher}, 'registerUser called');
 
-      const result = await this.service.registerUser(firstName,lastName, email);
+      const result = await this.service.registerUser(firstName, lastName, nickName, email, password, isTeacher);
       if (result !== null) {
         res.status(200).json(result);
       } else {

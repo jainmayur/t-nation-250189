@@ -29,8 +29,8 @@ export class UserService {
     return result;
   }
 
-  public async registerUser(firstname: string, lastname: string, email: string): Promise<boolean> {
-    const result = await this.dao.registerUser(firstname, lastname, email);
+  public async registerUser(firstName: string, lastName: string, nickName: string, email: string, password: string, isTeacher: number): Promise<boolean> {
+    const result = await this.dao.registerUser(firstName, lastName, nickName, email, password, isTeacher);
     if (result) {
       // // convert isTeacher field to boolean
       // result.isTeacher = (result.isTeacher as any) === 1;

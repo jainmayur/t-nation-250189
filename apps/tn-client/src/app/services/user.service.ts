@@ -1,7 +1,7 @@
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subscriber } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../../../../shared/user';
 
@@ -28,7 +28,6 @@ export class UserService {
     return this.http.post<User>(url, {username: username, password: password}).pipe(
       map((result: User) => {
         if (result) {
-          console.log(result);
           return result;
         } else {
           return null;
@@ -37,20 +36,18 @@ export class UserService {
     );
   }
 
-  registerUser(firstName: string, lastName: string, nickName: string, email: string, password: string): any{
+  registerUser(firstName: string, lastName: string, nickName: string, email: string, password: string, isTeacher: number): Observable<User | null> {
     const url = `${environment.api_url}/users/register`;
-    const body = {
-      firstName: firstName,
-      lastName: lastName,
-      nickName: nickName,
-      email: email,
-      password: password
-
-    }
-    this.http.post(url, body).subscribe(result => {
-        console.log('registerUser  ', result);
-        
-    });
+    return this.http.post<User>(url, {firstName: firstName, lastName: lastName, nickName: nickName, email: email, password: password, isTeacher: isTeacher}).pipe(
+      map((result: User) => {
+        if (result) {
+          return result;
+        } else {
+          return null;
+        }
+      })
+    );
   }
+
 
 }

@@ -2,6 +2,7 @@ import { User } from '../../../../shared/user';
 import { Db } from '../db';
 import * as argon2 from 'argon2';
 import { async } from 'rxjs';
+import { number } from 'joi';
 
 export class UserDao {
   // initialize sqlite connector
@@ -28,22 +29,18 @@ export class UserDao {
     })
   }
 
-  public async registerUser(firstName: string, lastName: string, email: string): Promise<any> {
-    // const $firstName = firstName;
-    // const $lastName = lastName;
-    // const $email = email;
-    
-    this.sqlite.run(`INSERT INTO user (firstName, lastName, email) VALUES (?)`, ['Jake','Wright', 'jw@example.com']).then((result => {
-      console.log('row inserted  ', result);
-      
-    }))
-    // return this.sqlite.get(`select * from user where email=$username`, { $username }).then(async(result:User)=>{
-    //   const hash = result.password
-    //   if(await argon2.verify(hash, password)===true){
-    //     return result;
-    //   }else{
-    //     return null;
-    //   }
-    // })
-  }
+  public async registerUser(firstName: string, lastName: string, nickName: string, email: string, password: string, isTeacher: number): Promise<boolean> {
+    const $firstName = firstName;
+    const $lastName = lastName;
+    const $nickName = nickName;
+    const $email = email;   
+    const $password = await argon2.hash(password);
+    const $isTeacher = isTeacher; 
+    return this.sqlite.run(`INSERT INTO user (firstName, lastName, nickName, email, password, isTeacher) VALUES ($firstName, $lastName, $nickName, $email, $password, $isTeacher) RETURNING *`, 
+    { $firstName, $lastName, $nickName, $email, $password, $isTeacher }).then(async()=>{
+      console.log("row inserted");
+      return true;
+    }) 
+   }
+
 }
