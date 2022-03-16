@@ -35,12 +35,12 @@ export class UserController {
       const { error } = schema.validate({username,password}, { abortEarly: false });
       if (error) {
         const errors = error.details.map((e) => e.message);
-        this.log.error({ errors}, `GET /api/users/login`);
+        this.log.error({ errors}, `GET /api/user/login`);
         res.status(400).json({errors});
         return;
       }
 
-      this.log.info({username,password}, 'getUser called');
+      this.log.info({username,password}, 'loginUser called');
 
       const result = await this.service.loginUser(username, password);
       if (result !== null) {
