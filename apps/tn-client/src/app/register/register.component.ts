@@ -1,49 +1,54 @@
+import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import {FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
-import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { User } from '../../../../shared/user';
 
-@Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
-})
-export class RegisterComponent implements OnInit {
+@Injectable()
+export class UserService {
+  constructor(private http: HttpClient) {}
 
-  registerForm:any = FormGroup;  //create property to hold formgroup
-  constructor(private fb : FormBuilder, 
-    private http : HttpClient, 
-    private router : Router,
-    private userService: UserService) {}
+  getUser(id: number): Observable<User | null> {
+    const url = `${environment.api_url}/users/${id}`;
 
-  ngOnInit(): void {
-    this.userService.registerUser('Nancy','Benz', 'N.B', 'nb@example.com', 'testtest', 1)
-    .subscribe(res=>{
-      console.log(res);
-    })
-    this.registerForm = this.fb.group({
-      firstName:['',Validators.required],
-      lastName:['',Validators.required],
-      NickName:['',Validators.required],
-      email:['',Validators.compose([Validators.required,Validators.email])],
-      password:['',Validators.required]
-    })
+    return this.http.get<User>(url).pipe(
+      map((result: User) => {
+        if (result) {
+          return result;
+        } else {
+          return null;
+        }
+      })
+    );
   }
-  registerSubmit(){
-    console.log("Registration");
-    console.log(this.registerForm.firstName);
-    let firstName = this.registerForm.controls.firstName.value;
-    // let lastName = this.registerForm.id.lastName.value;
-    // let nickName = this.registerForm.id.nickName.value;
-    // let email = this.registerForm.id.email.value;
-    // let password = this.registerForm.id.email.value;
-    // let isTeacher = this.registerForm.id.email.value;
-    // this.userService.registerUser(firstName, lastName, nickName, email, password, isTeacher)
-    // .subscribe(res=>{
-    //   console.log(res);
-    //   console.log("Registeration Successful..");
-    // })
 
+  loginUser(username:string, password: string): Observable<User | null> {
+    const url = `${environment.api_url}/users/login`;
+    return this.http.post<User>(url, {username: username, password: password}).pipe(
+      map((result: User) => {
+        if (result) {
+          return result;
+        } else {
+          return null;
+        }
+      })
+    );
   }
+
+  registerUser(firstName: string, lastName: string, nickName: string, email: string, password: string, isTeacher: number): Observable<User | null> {
+    const url = `${environment.api_url}/users/register`;
+    return this.http.post<User>(url, {firstName: firstName, lastName: lastName, nickName: nickName, email: email, password: password, isTeacher: isTeacher}).pipe(
+      map((result: User) => {
+        if (result) {
+          return result;
+        } else {
+          return null;
+        }
+      })
+    );
+  }
+
+
 }
+
