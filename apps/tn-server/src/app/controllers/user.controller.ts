@@ -3,10 +3,6 @@ import * as express from 'express';
 import { UserService } from '../services/user.service';
 import * as joi from 'joi';
 
-const cors = require('cors');
-const app = express();
-app.use(cors());
-
 export class UserController {
   public router = express.Router();
 
@@ -21,7 +17,6 @@ export class UserController {
   }
 
   private initializeRouter() {
-    this.router.use(cors());
     this.router.get('/api/users/:id', this.getUser());
     this.router.post('/api/users/login', this.loginUser());
     this.router.post('/api/users/register', this.registerUser());
@@ -29,8 +24,6 @@ export class UserController {
 
   private loginUser() {
     return async (req, res) => {
-      res.setHeader('Access-Control-Allow-Origin', '*');
-
       const username = req.body.username;
       const password = req.body.password;
 
@@ -42,7 +35,7 @@ export class UserController {
       const { error } = schema.validate({username,password}, { abortEarly: false });
       if (error) {
         const errors = error.details.map((e) => e.message);
-        this.log.error({ errors}, `GET /api/user/login`);
+        this.log.error({ errors}, `GET /api/users/login`);
         res.status(400).json({errors});
         return;
       }
@@ -60,7 +53,6 @@ export class UserController {
 
   private getUser() {
     return async (req, res) => {
-      res.setHeader('Access-Control-Allow-Origin', '*');
       const id = req.params.id;
 
       // validate incoming request
@@ -88,7 +80,6 @@ export class UserController {
 
   private registerUser() {
     return async (req, res) => {
-      res.setHeader('Access-Control-Allow-Origin', '*');
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
       const nickName = req.body.nickName;
@@ -108,7 +99,7 @@ export class UserController {
       const { error } = schema.validate({firstName, lastName, nickName, email, password, isTeacher}, { abortEarly: false });
       if (error) {
         const errors = error.details.map((e) => e.message);
-        this.log.error({ errors}, `GET /api/users/register`);
+        this.log.error({ errors}, `GET /api/user/register`);
         res.status(400).json({errors});
         return;
       }

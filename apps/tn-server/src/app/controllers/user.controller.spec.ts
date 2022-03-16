@@ -1,117 +1,48 @@
-import { pino } from 'pino';
+import { User } from '../../../../shared/user';
 import * as express from 'express';
-import { UserService } from '../services/user.service';
-import * as joi from 'joi';
+import path = require('path');
+import * as request from 'supertest';
+import { Db } from '../db';
+import { UserController } from './user.controller';
 
-export class UserController {
-  public router = express.Router();
+describe('UserController', () => {
+  let app;
+  beforeAll(() => {
+    app = express();
+    app.use(express.json());
 
-  private log: pino.Logger;
+    // init sqlite (in memory)
+    new Db(path.join(__dirname, '../../assets/trivia-nation.sql'), ':memory:');
 
-  private service: UserService;
+    app.use(new UserController().router);
+  });
 
-  constructor() {
-    this.log = pino().child({ context: UserController.name });
-    this.service = new UserService();
-    this.initializeRouter();
-  }
+  it('should return a teacher', () => {
+    return request(app)
+      .get('/api/users/1')
+      .expect(200)
+      .then((resp) => {
+        const user: User = resp.body;
+        expect(user.isTeacher).toBe(true);
+      });
+  });
 
-  private initializeRouter() {
-    this.router.get('/api/users/:id', this.getUser());
-    this.router.post('/api/users/login', this.loginUser());
-    this.router.post('/api/users/register', this.registerUser());
-  }
+  it('should return a student', () => {
+    return request(app)
+      .get('/api/users/2')
+      .expect(200)
+      .then((resp) => {
+        const user: User = resp.body;
+        expect(user.isTeacher).toBe(false);
+      });
+  });
 
-  private loginUser() {
-    return async (req, res) => {
-      const username = req.body.username;
-      const password = req.body.password;
-
-      // validate incoming request
-      const schema = joi.object({
-        username: joi.string().required(),
-        password: joi.string().required()
-      })
-      const { error } = schema.validate({username,password}, { abortEarly: false });
-      if (error) {
-        const errors = error.details.map((e) => e.message);
-        this.log.error({ errors}, `GET /api/user/login`);
-        res.status(400).json({errors});
-        return;
-      }
-
-      this.log.info({username,password}, 'loginUser called');
-
-      const result = await this.service.loginUser(username, password);
-      if (result !== null) {
-        res.status(200).json(result);
-      } else {
-        res.status(400).json(result);
-      }
-    };
-  }
-
-  private getUser() {
-    return async (req, res) => {
-      const id = req.params.id;
-
-      // validate incoming request
-      const schema = joi.object({
-        id: joi.number().integer().min(1)
-      })
-      const { error } = schema.validate({id}, { abortEarly: false });
-      if (error) {
-        const errors = error.details.map((e) => e.message);
-        this.log.error({ errors}, `GET /api/user/:id`);
-        res.status(400).json({errors});
-        return;
-      }
-
-      this.log.info({ id }, 'getUser called');
-
-      const result = await this.service.getUser(id);
-      if (result !== null) {
-        res.status(200).json(result);
-      } else {
-        res.status(400).json(result);
-      }
-    };
-  }
-
-  private registerUser() {
-    return async (req, res) => {
-      const firstName = req.body.firstName;
-      const lastName = req.body.lastName;
-      const nickName = req.body.nickName;
-      const email = req.body.email;
-      const password = req.body.password;
-      const isTeacher = req.body.isTeacher;
-
-      // validate incoming request
-      const schema = joi.object({
-        firstName: joi.string().required(),
-        lastName: joi.string().required(),
-        nickName: joi.string().required(),
-        email: joi.string().required(),
-        password: joi.string().required(),
-        isTeacher: joi.number().required()
-      })
-      const { error } = schema.validate({firstName, lastName, nickName, email, password, isTeacher}, { abortEarly: false });
-      if (error) {
-        const errors = error.details.map((e) => e.message);
-        this.log.error({ errors}, `GET /api/user/register`);
-        res.status(400).json({errors});
-        return;
-      }
-
-      this.log.info({firstName, lastName, nickName, email, password, isTeacher}, 'registerUser called');
-
-      const result = await this.service.registerUser(firstName, lastName, nickName, email, password, isTeacher);
-      if (result !== null) {
-        res.status(200).json(result);
-      } else {
-        res.status(400).json(result);
-      }
-    };
-  }
-}
+  it('should return null if user id does not exist', () => {
+    return request(app)
+      .get('/api/users/3')
+      .expect(400)
+      .then((resp) => {
+        expect(resp.body).toBe(null);
+      });
+  });
+});

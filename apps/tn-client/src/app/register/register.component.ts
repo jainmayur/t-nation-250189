@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
 import { Router } from '@angular/router';
@@ -47,8 +47,8 @@ export class RegisterComponent implements OnInit {
     const isTeacher = parseInt(Teacher);
     //console.log(isTeacher);    
     this.userService.registerUser(firstName, lastName, nickName, email, password, isTeacher)
-    .subscribe(res=>{
-      console.log(res);
+    .subscribe(result=>{
+      console.log(result);
       console.log("Registeration Successful..");
     })
   }

@@ -36,12 +36,15 @@ export class LoginComponent implements OnInit {
     //let resp:boolean;
     let username = this.loginForm.controls.email.value;
     let password = this.loginForm.controls.password.value;
-    this.userService.loginUser(username, password).subscribe(res=>{
-      console.log(res);
+    this.userService.loginUser(username, password).subscribe((res: any) =>{
+      if (res === true) {
+        console.log("Login Success!")
+        this.router.navigate(['user-dashboard', 1]);
+      } else {
+        console.log("Wrong password!")
+        this.loginForm.reset();
+      }
       //this.islogin = res;
-      alert("Login Successful !!");
-      this.loginForm.reset();
-      this.router.navigate(['login']);
     })
   }
 

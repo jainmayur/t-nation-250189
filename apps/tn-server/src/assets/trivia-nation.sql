@@ -11,7 +11,7 @@ create table if not exists user (
   firstName text not null,
   lastName text not null,
   nickName text not null,
-  email text not null,
+  email text not null UNIQUE,
   password text not null, -- argon2 hash
   isTeacher integer not null default 0 -- boolean
 );

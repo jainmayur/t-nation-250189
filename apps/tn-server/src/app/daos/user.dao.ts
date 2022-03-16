@@ -29,18 +29,23 @@ export class UserDao {
     })
   }
 
-  public async registerUser(firstName: string, lastName: string, nickName: string, email: string, password: string, isTeacher: number): Promise<boolean> {
+  public async registerUser(firstName: string, lastName: string, nickName: string, email: string, password: string, isTeacher: number): Promise<number> {
     const $firstName = firstName;
     const $lastName = lastName;
     const $nickName = nickName;
     const $email = email;   
     const $password = await argon2.hash(password);
     const $isTeacher = isTeacher; 
-    return this.sqlite.run(`INSERT INTO user (firstName, lastName, nickName, email, password, isTeacher) VALUES ($firstName, $lastName, $nickName, $email, $password, $isTeacher) RETURNING *`, 
-    { $firstName, $lastName, $nickName, $email, $password, $isTeacher }).then((res)=>{
-      console.log(res);
-      return true;
-    }) 
-   }
+    const {lastID} = await this.sqlite.run(`INSERT INTO user (firstName, lastName, nickName, email, password, isTeacher) VALUES ($firstName, $lastName, $nickName, $email, $password, $isTeacher)`, 
+    { $firstName, $lastName, $nickName, $email, $password, $isTeacher }).then((result)=>{
+      if(result !=null){        
+        console.log(result);
 
+      }   
+    }).catch(err=>{
+      console.log("Email already exists");
+      return err;
+    });
+     return lastID;
+   }
 }
