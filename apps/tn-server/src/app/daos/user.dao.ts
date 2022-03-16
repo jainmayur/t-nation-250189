@@ -29,7 +29,7 @@ export class UserDao {
     })
   }
 
-  public async registerUser(firstName: string, lastName: string, nickName: string, email: string, password: string, isTeacher: number): Promise<boolean> {
+  public async registerUser(firstName: string, lastName: string, nickName: string, email: string, password: string, isTeacher: number): Promise<User> {
     const $firstName = firstName;
     const $lastName = lastName;
     const $nickName = nickName;
@@ -37,9 +37,9 @@ export class UserDao {
     const $password = await argon2.hash(password);
     const $isTeacher = isTeacher; 
     return this.sqlite.run(`INSERT INTO user (firstName, lastName, nickName, email, password, isTeacher) VALUES ($firstName, $lastName, $nickName, $email, $password, $isTeacher) RETURNING *`, 
-    { $firstName, $lastName, $nickName, $email, $password, $isTeacher }).then(async()=>{
+    { $firstName, $lastName, $nickName, $email, $password, $isTeacher }).then(async(res:User | any)=>{
       console.log("row inserted");
-      return true;
+      return res;
     }) 
    }
 
