@@ -37,8 +37,8 @@ export class UserDao {
     const $password = await argon2.hash(password);
     const $isTeacher = isTeacher; 
     return this.sqlite.run(`INSERT INTO user (firstName, lastName, nickName, email, password, isTeacher) VALUES ($firstName, $lastName, $nickName, $email, $password, $isTeacher) RETURNING *`, 
-    { $firstName, $lastName, $nickName, $email, $password, $isTeacher }).then(async()=>{
-      console.log("row inserted");
+    { $firstName, $lastName, $nickName, $email, $password, $isTeacher }).then((res)=>{
+      console.log(res);
       return true;
     }) 
    }

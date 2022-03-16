@@ -24,7 +24,7 @@ export class UserService {
   }
 
   loginUser(username:string, password: string): Observable<User | null> {
-    const url = `${environment.api_url}/users/login`;
+    const url = `${environment.api_url}/user/login`;
     return this.http.post<User>(url, {username: username, password: password}).pipe(
       map((result: User) => {
         if (result) {

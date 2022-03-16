@@ -18,32 +18,38 @@ export class RegisterComponent implements OnInit {
     private userService: UserService) {}
 
   ngOnInit(): void {
-    this.userService.registerUser('Nancy','Benz', 'N.B', 'nb@example.com', 'testtest', 1)
-    .subscribe(res=>{
-      console.log(res);
-    })
+    // this.userService.registerUser('Nancy','Benz', 'N.B', 'nb@example.com', 'testtest', 1)
+    // .subscribe(res=>{
+    //   console.log(res);
+    // })
     this.registerForm = this.fb.group({
       firstName:['',Validators.required],
       lastName:['',Validators.required],
-      NickName:['',Validators.required],
+      nickName:['',Validators.required],
       email:['',Validators.compose([Validators.required,Validators.email])],
-      password:['',Validators.required]
+      password:['',Validators.required],
+      accountholder:['',Validators.required]
     })
   }
-  registerSubmit(){
-    console.log("Registration");
-    console.log(this.registerForm.firstName);
-    let firstName = this.registerForm.controls.firstName.value;
-    // let lastName = this.registerForm.id.lastName.value;
-    // let nickName = this.registerForm.id.nickName.value;
-    // let email = this.registerForm.id.email.value;
-    // let password = this.registerForm.id.email.value;
-    // let isTeacher = this.registerForm.id.email.value;
-    // this.userService.registerUser(firstName, lastName, nickName, email, password, isTeacher)
-    // .subscribe(res=>{
-    //   console.log(res);
-    //   console.log("Registeration Successful..");
-    // })
 
+  get f(){
+    return this.registerForm.controls;
+  }
+
+  registerSubmit(){
+    console.log(this.registerForm.value);
+    let firstName = this.registerForm.controls.firstName.value;
+    let lastName = this.registerForm.controls.lastName.value;
+    let nickName = this.registerForm.controls.nickName.value;
+    let email = this.registerForm.controls.email.value;
+    let password = this.registerForm.controls.password.value;
+    let Teacher = this.registerForm.controls.accountholder.value;
+    const isTeacher = parseInt(Teacher);
+    //console.log(isTeacher);    
+    this.userService.registerUser(firstName, lastName, nickName, email, password, isTeacher)
+    .subscribe(res=>{
+      console.log(res);
+      console.log("Registeration Successful..");
+    })
   }
 }

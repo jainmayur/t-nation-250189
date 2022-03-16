@@ -1,13 +1,13 @@
 .box{
     border: none;
-    width: 500px;
-    padding: 40px;
+    width: 65%;
+    padding: 35px;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%,-40%);
     background: rgb(109, 109, 138);
-    //background: linear-gradient(90deg, rgb(157, 157, 161) 0%, rgb(157, 157, 161) 100% );
+    background: linear-gradient(270deg, rgb(109, 109, 138), rgb(183, 183, 187) );
 }
 .box h2, h6{
     color: #fff;
