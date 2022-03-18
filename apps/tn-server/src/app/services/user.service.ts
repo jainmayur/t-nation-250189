@@ -1,9 +1,18 @@
 import { User } from '../../../../shared/user';
-import { UserDao } from '../daos/user.dao';
+import { LoginUserRes, UserDao } from '../daos/user.dao';
 import { CONTESTS } from '../../../../shared/mocks/mock-trivia-contests';
 
 export class UserService {
   private dao: UserDao;
+  private _isTeacher : number;
+
+  get isTeacher() : number{
+   return this._isTeacher; 
+  }
+
+  set isTeacher(isTeacher: number){
+    this._isTeacher = isTeacher;
+  } 
 
   constructor() {
     this.dao = new UserDao();
@@ -19,13 +28,15 @@ export class UserService {
     return result;
   }
 
-  public async loginUser(username: string, password: string): Promise<boolean> {
+  public async loginUser(username: string, password: string): Promise<LoginUserRes> {
     const result = await this.dao.loginUser(username, password);
-    if (result) {
-      // // convert isTeacher field to boolean
-      // result.isTeacher = (result.isTeacher as any) === 1;
-      // result.triviaContests = [CONTESTS[0].id, CONTESTS[1].id];
-    }
+    // if (result.isLogin) {
+    //   // // convert isTeacher field to boolean
+    //   // result.isTeacher = (result.isTeacher as any) === 1;
+    //   // result.triviaContests = [CONTESTS[0].id, CONTESTS[1].id];
+      console.log(result);
+      this.isTeacher = result.isTeacher;
+    //}
     return result;
   }
 

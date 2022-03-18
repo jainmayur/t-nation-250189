@@ -48,8 +48,13 @@ export class RegisterComponent implements OnInit {
     //console.log(isTeacher);    
     this.userService.registerUser(firstName, lastName, nickName, email, password, isTeacher)
     .subscribe(result=>{
-      console.log(result);
-      console.log("Registeration Successful..");
+      console.log("lastID: " + result);
+      if(result){
+        console.log("Registeration Successful..");
+      }else{
+        console.log("Email already exists..");
+      }
+      
     })
   }
 }

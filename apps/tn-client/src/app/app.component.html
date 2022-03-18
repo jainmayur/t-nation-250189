@@ -8,7 +8,7 @@
 
       <div class="navbar-collapse collapse" id="navbarContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li *ngFor="let link of links" class="nav-item">
+          <li *ngFor="let link of links" class="nav-item" *ngIf="isTeacher == 1">
             <a class="nav-link" aria-current="page" data-bs-toggle="collapse" data-bs-target="#navbarContent" [routerLink]="link.url">{{link.name}}</a>
           </li>
         </ul>

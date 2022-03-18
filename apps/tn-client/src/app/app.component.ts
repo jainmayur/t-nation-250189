@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { UserService } from 'apps/tn-server/src/app/services/user.service';
 
 type Link = {
   /** The Angular router path */
@@ -13,9 +14,18 @@ type Link = {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  
   /** Title of the app */
   public title = 'Trivia Nation';
+  isTeacher : number;
+
+  constructor(private userService : UserService){
+    
+  }
+  ngOnInit(): void {
+    this.isTeacher = this.userService.isTeacher;
+  }
 
   /** Links in the navbar */
   public links: Link[] = [
@@ -23,5 +33,9 @@ export class AppComponent {
       name: 'Home',
       url: [''],
     },
+    {
+      name: 'Questions Bank',
+      url: ['addquestions'],
+    }
   ];
 }

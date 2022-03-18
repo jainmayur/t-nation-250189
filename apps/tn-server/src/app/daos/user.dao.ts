@@ -1,8 +1,11 @@
 import { User } from '../../../../shared/user';
 import { Db } from '../db';
 import * as argon2 from 'argon2';
-import { async } from 'rxjs';
-import { number } from 'joi';
+
+export interface LoginUserRes {
+  isLogin:boolean;
+  isTeacher:number;
+}
 
 export class UserDao {
   // initialize sqlite connector
@@ -17,14 +20,20 @@ export class UserDao {
     return this.sqlite.get(`select * from user where userid=$id`, { $id });
   }
 
-  public async loginUser(username: string, password: string): Promise<boolean> {
+  public async loginUser(username: string, password: string): Promise<LoginUserRes> {
     const $username = username;
+    let res = {isLogin: false, isTeacher: null}
     return this.sqlite.get(`select * from user where email=$username`, { $username }).then(async(result:User)=>{
       const hash = result.password
+      //console.log(result);
       if(await argon2.verify(hash, password)===true){
-        return true;
+        res.isTeacher = result.isTeacher;
+        res.isLogin = true;
+        return res;
       }else{
-        return false;
+        res.isTeacher = result.isTeacher;
+        res.isLogin = false;
+        return res;
       }
     })
   }
@@ -36,11 +45,12 @@ export class UserDao {
     const $email = email;   
     const $password = await argon2.hash(password);
     const $isTeacher = isTeacher; 
-    const {lastID} = await this.sqlite.run(`INSERT INTO user (firstName, lastName, nickName, email, password, isTeacher) VALUES ($firstName, $lastName, $nickName, $email, $password, $isTeacher)`, 
+    let lastID;
+    await this.sqlite.run(`INSERT INTO user (firstName, lastName, nickName, email, password, isTeacher) VALUES ($firstName, $lastName, $nickName, $email, $password, $isTeacher)`, 
     { $firstName, $lastName, $nickName, $email, $password, $isTeacher }).then((result)=>{
       if(result !=null){        
         console.log(result);
-
+        lastID=result.lastID;
       }   
     }).catch(err=>{
       console.log("Email already exists");
