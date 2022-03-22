@@ -15,8 +15,9 @@ export class UserDashboardComponent implements OnInit {
   contests: TriviaContest[] = [];
   user: User | null; 
   code: string;
-  contest: TriviaContest;
+  contest: TriviaContest | null;
   codeIsInvalid: boolean;
+  userHasCode: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,15 +50,16 @@ export class UserDashboardComponent implements OnInit {
 
     if(this.user)
     {
-       this.triviaContestService.getTriviaContests(this.user.triviaContests)
+       this.triviaContestService.getTriviaContestsByUserId(this.user.userID)
           .subscribe(contests => this.contests = contests);   
     }
 
   }
 
-  validateTriviaContest(code: string): void {
+  joinTriviaContest(): void {
 
-    if(!this.code)
+    const codeToAdd  = this.code.trim();
+    if(codeToAdd === "")
     {
         this.codeIsInvalid = true;
         return;
@@ -65,22 +67,43 @@ export class UserDashboardComponent implements OnInit {
 
     if(this.user)
     {
-       this.triviaContestService.getTriviaContest(code)
+      if(this.contests.find(x=> x.code = codeToAdd))
+      {
+        this.userHasCode = true;   
+      }
+
+       this.triviaContestService.getTriviaContest(codeToAdd)
           .subscribe(contest => 
             {
               this.contest = contest
               if(!this.contest)
               {
                 this.codeIsInvalid = true;
-                return;
+              }else{
+           
+                this.contests.push(this.contest);
+                this.user?.triviaContests.push(codeToAdd);
+                if(this.user)
+                {
+                  this.addContestForUser(this.user.userID, this.contest.gameID);
+                }
               }
             });   
     } 
 
   }
 
-  joinTriviaContest(): void{
-    this.validateTriviaContest(this.code);
-    this.user?.triviaContests.push(this.contest.id);
+  addContestForUser(userId: number, gameId:number): boolean
+  {
+    this.triviaContestService.addContestForUser(userId, gameId)
+    .subscribe(result => 
+      {
+        if(result == false)
+        {
+          //todo add error         
+        }
+        return result;
+      });   
+      return false;
   }
 }

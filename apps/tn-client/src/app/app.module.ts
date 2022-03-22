@@ -9,18 +9,20 @@ import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';
 import { TriviaContestService } from './services/trivia-contest-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+//import { RegistrationComponent } from './registration/registration.component';
 import { GameMapComponent } from './game-map/game-map.component';
+import { AddquestionComponent } from './addquestion/addquestion.component';
 //import { AuthGuard } from './services/auth.guard';
 
 
 @NgModule({
-  declarations: [AppComponent, UserDashboardComponent, LoginComponent, RegisterComponent, GameMapComponent],
+  declarations: [AppComponent, UserDashboardComponent, LoginComponent, RegisterComponent, GameMapComponent, AddquestionComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule
+    ReactiveFormsModule
   ],
   providers: [UserService, TriviaContestService],
   bootstrap: [AppComponent],

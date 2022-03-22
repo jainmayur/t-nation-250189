@@ -1,12 +1,12 @@
 .box{
     border: none;
-    width: 65%;
-    padding: 35px;
+    width: 42%;
+    padding: 5% 2%;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-40%);
-    background: rgb(109, 109, 138);
+    //background: rgb(109, 109, 138);
     background: linear-gradient(270deg, rgb(109, 109, 138), rgb(183, 183, 187) );
 }
 .box h2, h6{

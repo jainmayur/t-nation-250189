@@ -32,6 +32,7 @@ export class UserController {
         username: joi.string().required(),
         password: joi.string().required()
       })
+
       const { error } = schema.validate({username,password}, { abortEarly: false });
       if (error) {
         const errors = error.details.map((e) => e.message);

@@ -1,21 +1,24 @@
 import { User } from '../../../../shared/user';
 import { LoginUserRes, UserDao } from '../daos/user.dao';
 import { CONTESTS } from '../../../../shared/mocks/mock-trivia-contests';
+import { TriviaDao } from '../daos/trivia.dao';
 
 export class UserService {
   private dao: UserDao;
-  private _isTeacher : number;
+  private triviaService: TriviaDao;
+  //private _isTeacher : number;
 
-  get isTeacher() : number{
-   return this._isTeacher; 
-  }
+  // get isTeacher() : number{
+  //  return this._isTeacher; 
+  // }
 
-  set isTeacher(isTeacher: number){
-    this._isTeacher = isTeacher;
-  } 
+  // set isTeacher(isTeacher: number){
+  //   this._isTeacher = isTeacher;
+  // } 
 
   constructor() {
     this.dao = new UserDao();
+    this.triviaService = new TriviaDao();
   }
 
   public async getUser(id: number): Promise<User> {
@@ -23,7 +26,9 @@ export class UserService {
     if (result) {
       // convert isTeacher field to boolean
       result.isTeacher = (result.isTeacher as any) === 1;
-      result.triviaContests = [CONTESTS[0].id, CONTESTS[1].id];
+
+
+      //result.triviaContests = await this.triviaService.getContestsForUserId(id);
     }
     return result;
   }
@@ -34,19 +39,19 @@ export class UserService {
     //   // // convert isTeacher field to boolean
     //   // result.isTeacher = (result.isTeacher as any) === 1;
     //   // result.triviaContests = [CONTESTS[0].id, CONTESTS[1].id];
-      console.log(result);
-      this.isTeacher = result.isTeacher;
+      //console.log("tn-server/userservice" + result);
+      //this.isTeacher = result.isTeacher;
     //}
     return result;
   }
 
   public async registerUser(firstName: string, lastName: string, nickName: string, email: string, password: string, isTeacher: number): Promise<number> {
     const result = await this.dao.registerUser(firstName, lastName, nickName, email, password, isTeacher);
-    if (result) {
-      // // convert isTeacher field to boolean
-      // result.isTeacher = (result.isTeacher as any) === 1;
-      // result.triviaContests = [CONTESTS[0].id, CONTESTS[1].id];
-    }
+    // if (result) {
+    //   // // convert isTeacher field to boolean
+    //   // result.isTeacher = (result.isTeacher as any) === 1;
+    //   // result.triviaContests = [CONTESTS[0].id, CONTESTS[1].id];
+    // }
     return result;
   }
 

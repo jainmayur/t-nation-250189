@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { number } from 'joi';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -38,7 +39,7 @@ export class LoginComponent implements OnInit {
     let password = this.loginForm.controls.password.value;
     this.userService.loginUser(username, password).subscribe((res: any) =>{
       console.log(res);
-      if (res.isLogin) {
+      if (res.isLogin === true) {
         console.log("Login Success!")
         this.router.navigate(['user-dashboard', 1]);
       } else {

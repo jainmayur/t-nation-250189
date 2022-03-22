@@ -1,0 +1,29 @@
+.box{
+    border: none;
+    //width: 40%;
+    padding: 3% 25%;
+    //position: absolute;
+    top: 55%;
+    left: 50%;
+    //transform: translate(-50%,-48%);
+    //background: rgb(109, 109, 138);
+    //background: linear-gradient(270deg, rgb(183, 183, 187), rgb(109, 109, 138) );
+}
+.box h2, h6{
+    //color: #fff;
+    font-weight: bolder;
+    text-align: center;
+    margin-bottom: 10%;
+}
+label {
+    //color: #fff;
+    margin-bottom: 0px;
+    font-size: 15px;
+}
+.footer{
+    text-align: right;
+}
+.center{
+    color: #fff;
+    text-align: left;
+}

@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
       if(result){
         console.log("Registeration Successful..");
       }else{
-        console.log("Email already exists..");
+        console.log("Email already registered..");
       }
       
     })

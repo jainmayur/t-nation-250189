@@ -1,0 +1,24 @@
+<div class="container-fluid box">
+    <h2>Add Questions!!!</h2>
+    <div class="form-group row col-xs-2">
+        <form [formGroup]="addQuestionForm" (ngSubmit)="addQuestion()">
+            <<h6>Add Question and Correct Answer with other options for the Multiple Choice questions.</h6>
+            <div class="mb-3">
+                <label for="question" class="form-label">Question</label>
+                <input formControlName="question" type="text" class="form-control" id="question">
+            </div>
+            <div class="mb-3">
+                <label for="answer" class="form-label">Answer</label>
+                <input formControlName="correctAnswer" type="text" class="form-control" id="correctAnswer" placeholder="Correct answer, Option of the answer">
+            </div> 
+            <div class="mb-3">
+                <label for="answer" class="form-label">Other Answers</label>
+                <input formControlName="otherAnswer1" type="text" class="form-control mb-2" id="otherAnswer1" placeholder="Option of the answer">
+                <input formControlName="otherAnswer2" type="text" class="form-control mb-2" id="otherAnswer2" placeholder="Option of the answer">
+                <input formControlName="otherAnswer3" type="text" class="form-control" id="otherAnswer3" placeholder="Option of the answer">
+            </div> 
+            <button class="btn btn-primary" type="submit">Add Question</button>
+            <!-- <p class="float-right"><a routerLink="/questions">List of available Questions</a></p> -->
+        </form>
+    </div>
+</div>
