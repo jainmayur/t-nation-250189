@@ -26,7 +26,8 @@
         "scripts": [
           "node_modules/jquery/dist/jquery.min.js",
           "node_modules/bootstrap/dist/js/bootstrap.min.js"
-        ]
+        ],
+        "sourceMap": true
       },
       "configurations": {
         "production": {
@@ -51,7 +52,7 @@
           "outputHashing": "all",
           "sourceMap": true
         },
-        "development": {
+          "development": {
           "buildOptimizer": false,
           "optimization": false,
           "vendorChunk": true,

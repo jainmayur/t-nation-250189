@@ -1,4 +1,4 @@
-import { Database } from 'sqlite3';
+import { Database, RunResult } from 'sqlite3';
 import { pino } from 'pino';
 import { environment } from '../environments/environment';
 import path = require('path');
@@ -10,7 +10,7 @@ import {readFileSync} from 'fs'
 export class Db {
   static conn: Database;
 
-  private log = pino().child({ context: 'sqlite' });
+  static log = pino().child({ context: 'sqlite' });
 
   /**
    * Create a singleton connector to Sqlite
@@ -26,9 +26,9 @@ export class Db {
     // connect to database
     Db.conn = new Database(file, (err) => {
       if (err) {
-        this.log.error(err);
+        Db.log.error(err);
       } else {
-        this.log.info('Successfully connected');
+        Db.log.info('Successfully connected');
       }
     });
 
@@ -36,9 +36,9 @@ export class Db {
     const specification = readFileSync(schema, 'utf8')
     Db.conn.exec(specification, (err) => {
       if (err) {
-        this.log.error(err);
+        Db.log.error(err);
       } else {
-        this.log.info('Sqlite ready')
+        Db.log.info('Sqlite ready')
       }
     });
   }
@@ -47,7 +47,7 @@ export class Db {
     return new Promise((resolve, reject) => {
       Db.conn.all(sql, binds, (err, rows) => {
         if (err) {
-          this.log.error({error: err, sql, binds});
+          Db.log.error({error: err, sql, binds});
           resolve(null);
         } else {
           resolve(rows.length > 0 ? rows[0] : null);
@@ -60,7 +60,7 @@ export class Db {
     return new Promise((resolve, reject) => {
       Db.conn.all(sql, binds, (err, rows) => {
         if (err) {
-          this.log.error({error: err, sql, binds});
+          Db.log.error({error: err, sql, binds});
           resolve([]);
         } else {
           resolve(rows);
@@ -69,12 +69,14 @@ export class Db {
     });
   }
 
-  async run(sql: string, binds = {}): Promise<void> {
+  async run(sql: string, binds = {}): Promise<RunResult> {
     return new Promise((resolve, reject) => {
-      Db.conn.run(sql, binds, (err) => {
+      Db.conn.run(sql, binds, function (err) {
         if (err) {
-          this.log.error({error: err, sql, binds});
-          resolve();
+          Db.log.error({error: err, sql, binds});
+          reject({lastID: null, changes: 0});
+        } else {
+          resolve(this)
         }
       });
     });

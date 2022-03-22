@@ -3,6 +3,8 @@ import * as path from 'path';
 import { environment } from '../environments/environment';
 import {pino} from 'pino';
 import { UserController } from './controllers/user.controller';
+import { TriviaController } from './controllers/trivia.controller';
+import { QuestionController } from './controllers/question.controller';
 
 
 class App {
@@ -10,7 +12,9 @@ class App {
   private log: pino.Logger; // Our logger instance
 
   // Controllers
-  private userController: UserController;
+  private userController: UserController;  
+  private triviaController: TriviaController;
+  private questionController : QuestionController;
 
   /**
    * Initializes the app and its routes
@@ -23,6 +27,8 @@ class App {
 
     // Set up the controllers
     this.userController = new UserController();
+    this.triviaController = new TriviaController();
+    this.questionController = new QuestionController();
 
     // Initialize routes for this app
     this.initializeApiRoutes(); // Listen for API calls
@@ -34,6 +40,8 @@ class App {
    */
   private initializeApiRoutes() {
     this.app.use(environment.prefix, this.userController.router);
+    this.app.use(environment.prefix, this.triviaController.router);
+    this.app.use(environment.prefix, this.questionController.router);
   }
 
   private initializeUiRoutes() {
@@ -41,9 +49,10 @@ class App {
     this.app.use(
       [
         `${environment.prefix}/login`,
-        `${environment.prefix}/registration`,
+        `${environment.prefix}/register`,
         `${environment.prefix}/user-dashboard/*`,
-        `${environment.prefix}/testMap`
+        `${environment.prefix}/testMap`,
+        `${environment.prefix}/addquestion`
       ],
       (req, res) => {
         res.sendFile(path.join(__dirname, './client/index.html'));

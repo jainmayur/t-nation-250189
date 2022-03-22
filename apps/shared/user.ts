@@ -13,5 +13,5 @@ export interface User {
   password?: string;
   isTeacher: boolean;
   // password field intentionally omitted
-  triviaContests: number[];
+  triviaContests: string[];
 }

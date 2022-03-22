@@ -1,4 +1,5 @@
 import { QuestionDao } from "../daos/question.dao";
+import { Question } from 'apps/shared/question';
 
 
 export class QuestionService {

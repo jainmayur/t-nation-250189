@@ -1,5 +1,5 @@
 export class TriviaContest{
-    id: number;
+    gameID: number;
     name: string;
     code: string;
     timeLimitInMinutes: number;

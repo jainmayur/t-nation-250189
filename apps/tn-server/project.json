@@ -11,7 +11,8 @@
         "outputPath": "dist/apps/trivia-nation/tn-server",
         "main": "apps/tn-server/src/main.ts",
         "tsConfig": "apps/tn-server/tsconfig.app.json",
-        "assets": ["apps/tn-server/src/assets", "apps/tn-server/src/bootstrap.sh"]
+        "assets": ["apps/tn-server/src/assets", "apps/tn-server/src/bootstrap.sh"],
+        "sourceMap": true
       },
       "configurations": {
         "production": {
@@ -31,8 +32,17 @@
       "executor": "@nrwl/node:execute",
       "options": {
         "buildTarget": "tn-server:build"
-      }
+      },
+      "sourceMap": true
     },
+    "development": {
+    "buildOptimizer": false,
+    "optimization": false,
+    "vendorChunk": true,
+    "extractLicenses": false,
+    "sourceMap": true,
+    "namedChunks": true
+  },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
